@@ -17,3 +17,12 @@ services:
       KAFKA_JMX_PORT: 9991
     ports:
       - 9092:9092
+  
+
+  mysql:
+    image: mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: debezium
+      MYSQL_DATABASE: debezium
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: debezium

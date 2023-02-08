@@ -26,7 +26,10 @@ services:
       MYSQL_DATABASE: debezium
       MYSQL_USER: docker
       MYSQL_PASSWORD: debezium
+      ports: 
+        - 3306:3306
 
+        
 
   debezium:
     image: debezium/connect

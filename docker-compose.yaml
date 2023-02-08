@@ -26,3 +26,17 @@ services:
       MYSQL_DATABASE: debezium
       MYSQL_USER: docker
       MYSQL_PASSWORD: debezium
+
+
+  debezium:
+    image: debezium/connect
+    depends_on: [kafka]
+    environment:
+      BOOTSTRAP_SERVERS: kafka:9092
+      GROUP_ID: 1
+      CONFIG_STORAGE_TOPIC: debconnect_config_topic
+      OFFSET_STORAGE_TOPIC: debconnect_offset_topic
+      STATUS_STORAGE_TOPIC: debconnect_status_topic
+    ports:
+      - 8083:8083
+      

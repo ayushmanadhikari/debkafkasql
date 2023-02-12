@@ -1,45 +1,45 @@
 version: '3.7'
 services:
   zookeeper:
-    image: zookeeper
+    image: confluentinc/cp-zookeeper:latest
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
     ports:
       - 2181:2181
   
-
   kafka:
-    image: confluentinc/cp-enterprise-kafka:5.5.3
-    depends_on: [zookeeper]
-    environment:
-      KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
-      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092
-      KAFKA_BROKER_ID: 1
-      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
-      KAFKA_JMX_PORT: 9991
+    image: confluentinc/cp-kafka
+    container_name: kafka0
     ports:
-      - 9092:9092
-  
-
-  mysql:
-    image: mysql
+      - 9094:9094
+    depends_on:
+      - zookeeper
     environment:
-      MYSQL_ROOT_PASSWORD: debezium
-      MYSQL_DATABASE: debezium
-      MYSQL_USER: docker
-      MYSQL_PASSWORD: debezium
-      ports: 
-        - 3306:3306
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: LISTENER_BOB://kafka0:29092,LISTENER_FRED://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: LISTENER_BOB://kafka0:29092,LISTENER_FRED://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_BOB:PLAINTEXT,LISTENER_FRED:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_BOB
+   
 
-        
 
-  debezium:
-    image: debezium/connect
-    depends_on: [kafka]
-    environment:
-      BOOTSTRAP_SERVERS: kafka:9092
-      GROUP_ID: 1
-      CONFIG_STORAGE_TOPIC: debconnect_config_topic
-      OFFSET_STORAGE_TOPIC: debconnect_offset_topic
-      STATUS_STORAGE_TOPIC: debconnect_status_topic
+
+  kafka_ui: 
+    image: provectuslabs/kafka-ui:master
+    extra_hosts:
+      - host.docker.internal:host-gateway
     ports:
-      - 8083:8083
+      - 8080:8080
+    environment:
+      KAFKA_CLUSTERS_0_NAME: local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka0:29092
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: localhost:8083
+      KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: stage
+
+
+
+
+
+
       

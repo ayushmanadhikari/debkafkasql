@@ -8,6 +8,7 @@ services:
     ports:
       - 2181:2181
   
+
   kafka:
     image: confluentinc/cp-kafka
     container_name: kafka0
@@ -21,14 +22,10 @@ services:
       KAFKA_ADVERTISED_LISTENERS: LISTENER_BOB://kafka0:29092,LISTENER_FRED://localhost:9092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: LISTENER_BOB:PLAINTEXT,LISTENER_FRED:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_BOB
-   
-
-
+  
 
   kafka_ui: 
     image: provectuslabs/kafka-ui:master
-    extra_hosts:
-      - host.docker.internal:host-gateway
     ports:
       - 8080:8080
     environment:
@@ -36,6 +33,10 @@ services:
       KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka0:29092
       KAFKA_CLUSTERS_0_KAFKACONNECT_0_ADDRESS: localhost:8083
       KAFKA_CLUSTERS_0_KAFKACONNECT_0_NAME: stage
+
+
+
+
 
 
 

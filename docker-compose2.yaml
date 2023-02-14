@@ -2,6 +2,7 @@ version: '3.7'
 services:
   schema-registry:
     image: confluentinc/cp-schema-registry:7.2.1.arm64
+    container_name: schema0
     environment:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka0:29092
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
@@ -10,7 +11,6 @@ services:
       - 8081:8081
     networks:
       - debkafsql_proxynet
-
 
 
   mysql:   
@@ -25,8 +25,31 @@ services:
     networks:
       - debkafsql_proxynet
 
-
-
+  kafkaconnect:
+    image: confluentinc/cp-kafka-connect
+    container_name: debezium
+    ports:
+      - 8083:8083
+    environment:
+      CONNECT_GROUP_ID: 1
+      CONNECT_CONFIG_STORAGE_TOPIC: my_connect_configs
+      CONNECT_OFFSET_STORAGE_TOPIC: my_connect_offsets
+      CONNECT_STATUS_STORAGE_TOPIC: my_connect_statuses
+      CONNECT_BOOTSTRAP_SERVERS: kafka0:29092
+      CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema0:8081
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema0:8081
+      CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect-cdc-00
+      CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"
+      CONNECT_STATUS_STORAGE_REPLICATION_FACTOR: "1"
+    links:
+      - kafka
+      - mysql
+    networks:
+      - debkafsql_proxynet
+  
 
 networks:
   debkafsql_proxynet:

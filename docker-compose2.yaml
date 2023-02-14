@@ -25,6 +25,7 @@ services:
     networks:
       - debkafsql_proxynet
 
+
   kafkaconnect:
     image: confluentinc/cp-kafka-connect
     container_name: debezium

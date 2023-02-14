@@ -12,7 +12,6 @@ services:
       - debkafsql_proxynet
 
 
-  
 
   mysql:   
     image: arm64v8/mysql

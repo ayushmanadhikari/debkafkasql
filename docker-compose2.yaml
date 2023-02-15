@@ -17,11 +17,12 @@ services:
     image: arm64v8/mysql
     container_name: mysql0
     ports:
-      - 33060:33060
+      - 3306:3306
     environment:
       MYSQL_ROOT_PASSWORD: debezium
       MYSQL_USER: docker  
       MYSQL_PASSWORD: debezium
+      MYSQL_DATABASE: debezium
     networks:
       - debkafsql_proxynet
 
@@ -39,8 +40,8 @@ services:
       CONNECT_BOOTSTRAP_SERVERS: kafka0:29092
       CONNECT_KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
       CONNECT_VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema0:8081
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema0:8081
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: schema0:8081
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: schema0:8081
       CONNECT_REST_ADVERTISED_HOST_NAME: kafka-connect-cdc-00
       CONNECT_CONFIG_STORAGE_REPLICATION_FACTOR: "1"
       CONNECT_OFFSET_STORAGE_REPLICATION_FACTOR: "1"

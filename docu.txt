@@ -1,0 +1,28 @@
+DOCKER documentation
+-NETWORKING
+	. ports: 
+		- 10:20 (host:container(h:c))
+		means, to use the containers port 20 and map it to the host/docker's container 10.
+		that means whenever we access the docker's/host's/thisSystem's port number 10 we will be taken to the container running in port number 20 
+	. you can use docker inspect container_name or 
+	docker network inspect network_name to get the ip, gateway, subnet or more info 
+	. 
+
+
+
+
+
+
+
+
+
+configuration from rmoff kafka listener's explained 
+
+     environment:
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENERS: PLAINTEXT://kafka0:29092,PLAINTEXT://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka0:29092,PLAINTEXT://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: LISTENER_BOB
+    networks:
+      - proxynet

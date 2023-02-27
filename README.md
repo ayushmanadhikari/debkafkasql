@@ -19,20 +19,22 @@ What this does is spuns up 6 containers and gets all the required services runni
 
 Check to see whether all the conainers are running. 
 
-After all the containers have spun up now we can send a curl request to debezium's connectors endpoint. 
+After all the containers have spun up, we can send a curl request to debezium's connectors endpoint. 
 ```
 curl -H "Accept:application/json" localhost:8083/connectors
 ```
 
-It should give back an empty array as a list of running containers. 
+This gives back the list of up and running connectors. As we have 0 registered connectors, it should give back an empty array as a list of running containers. 
 
-Now we need to register our connector to get it to propagate change data to a kafka topic named "debkafsql_db.debezium.<table_name>". To do that, we need to send another curl request as:
+So, we need to register our connector to get it to propagate change data to a kafka topic named "debkafsql_db.debezium.<table_name>". To do that, we need to send another curl request as:
 
 ```
 curl -i -X POST -H "Accept:application/json" -H "Content-Type:application/json" localhost:8083/connectors/ -d "@debezium_config.json"
 ```
 
-After sending this request, your connector should be up, running and ready to capture change data. All the tables of the database will now have their separate Kafka topics with their respective change data. 
+The ```-d``` tag indicates that the configuration data for the connector is in the ```debezium_config.json``` file.
+
+After sending this request, your connector should be up, running and ready to capture change data. All the tables of the database will now have their separate Kafka topics as "debkafsql_db.debezium.<table_name>" with their respective change data. 
 
 
 

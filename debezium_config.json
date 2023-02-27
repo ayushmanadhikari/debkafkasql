@@ -1,17 +1,18 @@
-{
-  "name": "inventory-connector",  
+{  "name": "test",  
   "config": {  
     "connector.class": "io.debezium.connector.mysql.MySqlConnector",
     "tasks.max": "1",  
-    "database.hostname": "localhost",  
+    "database.hostname": "mysql",  
     "database.port": "3306",
-    "database.user": "docker",
+    "database.user": "root",
     "database.password": "debezium",
-    "database.server.id": "184054",  
-    "topic.prefix": "dbserver1",  
-    "database.include.list": "debezium",  
-    "schema.history.internal.kafka.bootstrap.servers": "kafka0:29092",  
-    "schema.history.internal.kafka.topic": "schema-changes.inventory"}
-
-}
-
+    "database.server.id": "9991",  
+    "topic.prefix": "dbserver1",
+    "database.whitelist": "debezium", 
+    "database.history.kafka.bootstrap.servers": "kafka0:29092",  
+    "schema.history.internal.kafka.topic": "schema-changes.inventory",
+    "database.history.kafka.topic": "database_history_topic",
+    "include.schema.changes": "true",    
+    "database.server.name": "debkafsql_db",
+    "database.allowPublicKeyRetrieval":"true"
+    }}

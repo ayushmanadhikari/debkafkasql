@@ -1,16 +1,18 @@
 version: '3.7'
 services:
   schema-registry:
-    image: confluentinc/cp-schema-registry:7.2.1.arm64
+    image: confluentinc/cp-schema-registry
     container_name: schema0
+    platform: linux/arm64/v8
     environment:
       SCHEMA_REGISTRY_KAFKASTORE_BOOTSTRAP_SERVERS: kafka0:29092
       SCHEMA_REGISTRY_HOST_NAME: schema-registry
-      SCHEMA_REGISTRY_LISTENERS: http://schema-registry:8081, http://localhost:8081
+      SCHEMA_REGISTRY_LISTENERS: http://0.0.0.0:8081
     ports:
       - 8081:8081
     networks:
       - debkafsql_proxynet
+
 
 
   mysql:   
@@ -28,7 +30,7 @@ services:
 
 
   kafkaconnect:
-    image: quay.io/debezium/connect:2.1
+    image:  quay.io/debezium/connect:1.9
     container_name: debezium
     ports:
       - 8083:8083
@@ -38,8 +40,10 @@ services:
       CONFIG_STORAGE_TOPIC: connect_configs
       OFFSET_STORAGE_TOPIC: connect_offsets
       STATUS_STORAGE_TOPIC: connect_status
-      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://localhost:8081
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://localhost:8081
+      KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
+      VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://192.168.1.67:8081
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://192.168.1.67:8081
     depends_on: [kafka]
     networks:
       - debkafsql_proxynet

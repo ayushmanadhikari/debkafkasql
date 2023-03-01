@@ -42,8 +42,8 @@ services:
       STATUS_STORAGE_TOPIC: connect_status
       KEY_CONVERTER: io.confluent.connect.avro.AvroConverter
       VALUE_CONVERTER: io.confluent.connect.avro.AvroConverter
-      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://192.168.1.67:8081
-      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://192.168.1.67:8081
+      CONNECT_KEY_CONVERTER_SCHEMA_REGISTRY_URL: http://schema0:8081
+      CONNECT_VALUE_CONVERTER_SCHEMA_REGISTRY_URL: http://schema0:8081
     depends_on: [kafka]
     networks:
       - debkafsql_proxynet
